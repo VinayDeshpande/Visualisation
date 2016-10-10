@@ -88,13 +88,13 @@ div.tooltip {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/topojson/1.1.0/topojson.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-rise in %<input type='text' name='riseper' id='riseper' placeholder='00.00'><button onClick=pumpfunc()>rise</button>&nbsp;&nbsp;&nbsp;
-drop in %<input type='text' name='dropper' id='dropper' placeholder='00.00'><button onClick=dropfunc()>Drop</button><br>
+rise in %<input type='text' name='riseper' id='rise' placeholder='00.00'><button onClick=pumpfunc()>rise</button>&nbsp;&nbsp;&nbsp;
+drop in %<input type='text' name='dropper' id='dropp' placeholder='00.00'><button onClick=dropfunc()>Drop</button><br>
 <div id="chart" style = "float:left; width: 70%;"></div>
 <div id="canvas-svg"></div>
 <div id="list">
 <div id="tooltip-container"></div>
-<input type='checkbox' name='national' value='national' onchange=checktoggle(this)> National Unemployment Rate
+<input type='checkbox' name='national' value='national' onclick=checktoggle(this)> National Unemployment Rate
 
 <div>
 			State
@@ -103,8 +103,8 @@ drop in %<input type='text' name='dropper' id='dropper' placeholder='00.00'><but
 			<br><br>
 			<br><button type="button" id="clear" onclick=refresh()>Reset your Map	</button>
 <script>
-var color1=d3.scale.ordinal().range(["Grey",  "Grey",  "green", "orange", "violet", "cyan", "indigo", "black", "grey", "Brown", "Cerulean Blue", "Chestnut", "Crimson", "#8897CE", "#8F90CD", "#9788CD", "#9E81CC", "#AA81C5", "#B681BE", "#C280B7", "#CE80B0", "#D3779F", "#D76D8F", "#DC647E", "#E05A6D", "#E16167", "#E26962", "#E2705C", "#E37756", "#E38457", "#E39158", "#E29D58", "#E2AA59", "#E0B15B", "#DFB95C", "#DDC05E", "#DBC75F", "#E3CF6D", "#EAD67C", "#F2DE8A","#C0C0C0","#808080","#FF0000","#800000","#FFFF00","#808000","#00FF00","#008000","#008080","#00FFFF","#0000FF","#000080","#FF00FF","#800080","#6495ED","#008B8B", "#DC647E", "#E05A6D", "#E16167", "#E26962", "#E2705C", "#E37756", "#E38457", "#E39158", "#E29D58"]);     
-//var color2=d3.scale.ordinal().range(["Red",  "green", "orange", "violet", "cyan", "indigo", "black", "grey", "Brown", "Cerulean Blue", "Chestnut", "Crimson", "#8897CE", "#8F90CD", "#9788CD", "#9E81CC", "#AA81C5", "#B681BE", "#C280B7", "#CE80B0", "#D3779F", "#D76D8F", "#DC647E", "#E05A6D", "#E16167", "#E26962", "#E2705C", "#E37756", "#E38457", "#E39158", "#E29D58", "#E2AA59", "#E0B15B", "#DFB95C", "#DDC05E", "#DBC75F", "#E3CF6D", "#EAD67C", "#F2DE8A","#C0C0C0","#808080","#FF0000","#800000","#FFFF00","#808000","#00FF00","#008000","#008080","#00FFFF","#0000FF","#000080","#FF00FF","#800080","#6495ED","#008B8B","#7FB1CF", "#80A8CE", "#809ECE", "#8897CE", "#8F90CD", "#9788CD", "#9E81CC", "#AA81C5", "#B681BE", "#C280B7", "#CE80B0", "#D3779F", "#D76D8F", "#DC647E", "#E05A6D", "#E16167", "#E26962", "#E2705C", "#E37756", "#E38457", "#E39158", "#E29D58", "#E2AA59", "#E0B15B", "#DFB95C", "#DDC05E", "#DBC75F", "#E3CF6D", "#EAD67C", "#F2DE8A","#C0C0C0","#808080","#FF0000","#800000","#FFFF00","#808000","#00FF00","#008000","#008080","#00FFFF","#0000FF","#000080","#FF00FF","#800080","#6495ED","#008B8B"]);     
+var color1=d3.scale.ordinal().range(["Grey","green", "orange", "violet", "cyan", "indigo", "black", "grey", "Brown", "Cerulean Blue", "Chestnut", "Crimson", "#8897CE", "#8F90CD", "#9788CD", "#9E81CC", "#AA81C5", "#B681BE", "#C280B7", "#CE80B0", "#D3779F", "#D76D8F", "#DC647E", "#E05A6D", "#E16167", "#E26962", "#E2705C", "#E37756", "#E38457", "#E39158", "#E29D58", "#E2AA59", "#E0B15B", "#DFB95C", "#DDC05E", "#DBC75F", "#E3CF6D", "#EAD67C", "#F2DE8A","#C0C0C0","#808080","#FF0000","#800000","#FFFF00","#808000","#00FF00","#008000","#008080","#00FFFF","#0000FF","#000080","#FF00FF","#800080","#6495ED","#008B8B", "#DC647E", "#E05A6D", "#E16167", "#E26962", "#E2705C", "#E37756", "#E38457", "#E39158", "#E29D58"]);     
+var color2=d3.scale.ordinal().range(["Red","Grey","green", "orange", "violet", "cyan", "indigo", "black", "grey", "Brown", "Cerulean Blue", "Chestnut", "Crimson", "#8897CE", "#8F90CD", "#9788CD", "#9E81CC", "#AA81C5", "#B681BE", "#C280B7", "#CE80B0", "#D3779F", "#D76D8F", "#DC647E", "#E05A6D", "#E16167", "#E26962", "#E2705C", "#E37756", "#E38457", "#E39158", "#E29D58", "#E2AA59", "#E0B15B", "#DFB95C", "#DDC05E", "#DBC75F", "#E3CF6D", "#EAD67C", "#F2DE8A","#C0C0C0","#808080","#FF0000","#800000","#FFFF00","#808000","#00FF00","#008000","#008080","#00FFFF","#0000FF","#000080","#FF00FF","#800080","#6495ED","#008B8B", "#DC647E", "#E05A6D", "#E16167", "#E26962", "#E2705C", "#E37756", "#E38457", "#E39158", "#E29D58"]);     
 
 var state_list=[];
 state_list = ["Texas"]
@@ -265,7 +265,7 @@ var context = svg.append("g")
 				return valueline(d);
 			})
 			.attr("stroke", function (d) {
-					return color1(d[0].State);
+					return color2(d[0].State);
 					
 			})
 			.attr("clip-path", "url(#clip)")
@@ -286,6 +286,18 @@ var context = svg.append("g")
 			svg.selectAll(".line").append("title")
 				.text(function (d) {return d[0].State});
 			
+			svg.append("text")
+            .attr("text-anchor", "margin-right")  
+            .attr("transform", "rotate(-90)")
+            .attr("y", 45)
+            .attr("x", -180)
+      .attr("dy", "0.71em")
+      .attr("fill", "#000")
+            .text("Unemployment Rate(%)");
+			
+			
+			
+
 			
    focus.append("g")
 			.attr("class", "x axis")
@@ -428,7 +440,7 @@ function draw_map()
 			  var startColors = COLOR_START.getColors(),
 				  endColors = COLOR_END.getColors();
 			  
-			  var map_color = d3.scale.category10();;
+			  var map_color = [];
 			  var colors = [];
 			  
 			  for (var i = 0; i < COLOR_COUNTS; i++) {
@@ -572,25 +584,23 @@ function draw_map()
 }
 
 function dropfunc() {
-var drop=document.getElementById('dropper').value;
-drop=Number(drop);
-focus.selectAll(".line")
-.attr("stroke-opacity", function (unRates) {
-var bigDrop=false;
-for(var i=1; i<unRates.length; i++) {
-  if(unRates[i-1].Unemplyment-unRates[i].Unemplyment>drop)
-  bigDrop=true;
-}
-if(bigDrop) {
-return 1;
-}
-else {
-return 0.1;
-}
+var droprate= document.getElementById("drop").value;
+droprate= Number(droprate);
+  focus.selectAll(".line")
+  .attr("stroke-opacity", function(unrate){
+    var depression = false;
+    for(var i=1;i<unrate.length;i++ ){
+    if((unrate[i-1].unemplyment-unrate[i].unemplyment)>drop_amount)
+    decrease = true;
+    }
+    if (decrease)
+    return 1;
+    else
+    return 0.1; 
 });
 }
 
-function pumpfunc() {
+/*function pumpfunc() {
 var rise=document.getElementById('riseper').value;
 rise=Number(rise);
 focus.selectAll(".line")
@@ -607,7 +617,7 @@ else {
 return 0.1;
 }
 });
-}
+}*/
 function checktoggle(element) {
 if(element.checked) {
  state_list.push("National");
@@ -620,17 +630,9 @@ else {
 }
 }
 
-function clear()
-{
-	while(States_list.length > 0) {
-		States_list.pop();
-	}
-	document.getElementById("lb").innerHTML ="";
-	document.getElementById("canvas-svg").innerHTML ="";
-	draw_map();
-	document.getElementById("clear").disabled ="True";
-}
 function refresh(){
 location.reload();
 }
+
+
 </script>
