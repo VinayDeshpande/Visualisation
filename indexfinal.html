@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
+<h2>UNEMPLOYMENT RATES OF UNITED STATES OF AMERICA</h2>
 <style>
  
 body { font: 12px Arial;}
@@ -9,10 +10,17 @@ canvas-svg {
   height: 250px;
   position: relative;
 }
-
-.states {
+#state-borders {
   fill: none;
   stroke: #fff;
+  stroke-width: 1.5px;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  pointer-events: none;
+}
+.states {
+  fill: none;
+  stroke: #000;
   stroke-linejoin: round;
 }
 
@@ -22,9 +30,10 @@ canvas-svg {
 
 #tooltip-container {
   position: absolute;
-  //background-color: 'white';
+  background-color: #fff;
   color: #000;
   padding: 10px;
+  border: 1px solid;
   display: none;
 }
 .axis path,
@@ -53,6 +62,7 @@ canvas-svg {
 }
 .tooltip_key {
   font-weight: bold;
+  color : Black;
 }
 
 .tooltip_value {
@@ -72,7 +82,6 @@ div.tooltip {
 			border-radius: 8px;			
 			pointer-events: none;			
 		}
-
 </style>
 <body>
 <script src="http://d3js.org/d3.v3.min.js"></script>
@@ -85,24 +94,31 @@ drop in %<input type='text' name='dropper' id='dropper' placeholder='00.00'><but
 <div id="canvas-svg"></div>
 <div id="list">
 <div id="tooltip-container"></div>
+<input type='checkbox' name='national' value='national' onchange=checktoggle(this)> National Unemployment Rate
 
 <div>
 			State
 			<br><label id="lb"></label>
+			<br><label id="lb"></label>
+			<br><br>
+			<br><button type="button" id="clear" onclick=refresh()>Reset your Map	</button>
 <script>
-var state_list=[];
-state_list = ["National"];
+var color1=d3.scale.ordinal().range(["Grey",  "Grey",  "green", "orange", "violet", "cyan", "indigo", "black", "grey", "Brown", "Cerulean Blue", "Chestnut", "Crimson", "#8897CE", "#8F90CD", "#9788CD", "#9E81CC", "#AA81C5", "#B681BE", "#C280B7", "#CE80B0", "#D3779F", "#D76D8F", "#DC647E", "#E05A6D", "#E16167", "#E26962", "#E2705C", "#E37756", "#E38457", "#E39158", "#E29D58", "#E2AA59", "#E0B15B", "#DFB95C", "#DDC05E", "#DBC75F", "#E3CF6D", "#EAD67C", "#F2DE8A","#C0C0C0","#808080","#FF0000","#800000","#FFFF00","#808000","#00FF00","#008000","#008080","#00FFFF","#0000FF","#000080","#FF00FF","#800080","#6495ED","#008B8B", "#DC647E", "#E05A6D", "#E16167", "#E26962", "#E2705C", "#E37756", "#E38457", "#E39158", "#E29D58"]);     
+//var color2=d3.scale.ordinal().range(["Red",  "green", "orange", "violet", "cyan", "indigo", "black", "grey", "Brown", "Cerulean Blue", "Chestnut", "Crimson", "#8897CE", "#8F90CD", "#9788CD", "#9E81CC", "#AA81C5", "#B681BE", "#C280B7", "#CE80B0", "#D3779F", "#D76D8F", "#DC647E", "#E05A6D", "#E16167", "#E26962", "#E2705C", "#E37756", "#E38457", "#E39158", "#E29D58", "#E2AA59", "#E0B15B", "#DFB95C", "#DDC05E", "#DBC75F", "#E3CF6D", "#EAD67C", "#F2DE8A","#C0C0C0","#808080","#FF0000","#800000","#FFFF00","#808000","#00FF00","#008000","#008080","#00FFFF","#0000FF","#000080","#FF00FF","#800080","#6495ED","#008B8B","#7FB1CF", "#80A8CE", "#809ECE", "#8897CE", "#8F90CD", "#9788CD", "#9E81CC", "#AA81C5", "#B681BE", "#C280B7", "#CE80B0", "#D3779F", "#D76D8F", "#DC647E", "#E05A6D", "#E16167", "#E26962", "#E2705C", "#E37756", "#E38457", "#E39158", "#E29D58", "#E2AA59", "#E0B15B", "#DFB95C", "#DDC05E", "#DBC75F", "#E3CF6D", "#EAD67C", "#F2DE8A","#C0C0C0","#808080","#FF0000","#800000","#FFFF00","#808000","#00FF00","#008000","#008080","#00FFFF","#0000FF","#000080","#FF00FF","#800080","#6495ED","#008B8B"]);     
 
+var state_list=[];
+state_list = ["Texas"]
 function reDraw()
 {
 	document.getElementById("chart").innerHTML="";
 	//svg.selectAll("*").remove();
 	draw_graph();
 }
+function drop_function(){
+}
 draw_graph();
 function draw_graph()
 {
-
 /*d3.csv("Unemplyment.csv", function(error, data) {    
   dataTX = [];  // Only time series for TX
   data.forEach(function(d) {
@@ -113,7 +129,6 @@ function draw_graph()
     /*if (d.State=="Texas")
         dataTX.push(d);
   });
-
   
   
   //for all State
@@ -123,9 +138,7 @@ function draw_graph()
     d.Unemplyment = +d["Unemplyment rates by State, not seasonally adjusted"];
     //    dataTX.push(d);
   });
-
-
-  data_All[s].sort(function(a,b){kjash djkashdkashd
+  data_All[s].sort(function(a,b){
     if (a.date<b.date)
 		return -1;
     else if (a.date>b.date)
@@ -139,7 +152,6 @@ function draw_graph()
     d.Unemplyment = +d["Unemplyment rates by State, not seasonally adjusted"];
     //    dataTX.push(d);
   });
-
   var dataArray = [];
 	for(var s in data_All){
 		dataArray.push(data_All[s]);
@@ -150,7 +162,6 @@ var margin = {top: 10, right: 10, bottom: 100, left: 40},
     width = 960 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom,
     height2 = 500 - margin2.top - margin2.bottom;
-
 var color = d3.scale.category10();
  
 var parseDate = d3.time.format("%B-%Y").parse;
@@ -192,11 +203,9 @@ var focus = svg.append("g")
       
 var context = svg.append("g")
   .attr("transform", "translate(" + margin2.left + "," + margin2.top + ")");
-
-
 		var data_All = {};
 	
-		d3.csv("UnemploymentNational.csv", function(error, data) {
+		d3.csv("Unemployment.csv", function(error, data) {
 			dataTX = [];  // Only time series for TX
 			//dataYear = [];
 			  data.forEach(function(d) {
@@ -220,7 +229,6 @@ var context = svg.append("g")
 					d.date=parseDate(d.Month+"-"+d.Year);
 					d.Unemployment = +d["Unemployment"];
 				});
-
 			  data_All[Statename].sort(function(a,b){
 							if (a.date<b.date)
 								return -1;
@@ -252,12 +260,13 @@ var context = svg.append("g")
 			.append("g")
 			.append("path")
 			.attr("class", "line")
-			.attr("stroke-width",1)
+			.attr("stroke-width",2)
 			.attr("d",function(d){
 				return valueline(d);
 			})
 			.attr("stroke", function (d) {
-					return color(d[0].State);
+					return color1(d[0].State);
+					
 			})
 			.attr("clip-path", "url(#clip)")
 			.on("mouseover", function(d1){
@@ -273,6 +282,9 @@ var context = svg.append("g")
 				svg.selectAll(".line")
 					.attr("stroke-opacity",1);
 			});
+			
+			svg.selectAll(".line").append("title")
+				.text(function (d) {return d[0].State});
 			
 			
    focus.append("g")
@@ -337,12 +349,10 @@ function brush() {
 }
 }
  
-
 draw_map();
 function draw_map()
 {
 			d3.csv("Unemployment.csv", function(err, data) {
-
 			  var config = {"color1":"#d3e5ff","color2":"#08306B","stateDataColumn":"state_or_territory","valueDataColumn":"population_estimate_for_july_1_2013_number"}
 			  
 			  var WIDTH = 380, HEIGHT = 250;
@@ -418,7 +428,7 @@ function draw_map()
 			  var startColors = COLOR_START.getColors(),
 				  endColors = COLOR_END.getColors();
 			  
-			  var map_color = [] ;
+			  var map_color = d3.scale.category10();;
 			  var colors = [];
 			  
 			  for (var i = 0; i < COLOR_COUNTS; i++) {
@@ -447,7 +457,7 @@ function draw_map()
 				name_id_map[names[i].name] = names[i].id;
 				id_name_map[names[i].id] = names[i].name;
 			  }
-			  
+			 // var color = d3.Scale.category10();
 			  data.forEach(function(d) {
 				var id = name_id_map[d[MAP_STATE]];
 				valueById.set(id, +d[MAP_VALUE]); 
@@ -455,7 +465,7 @@ function draw_map()
 			  
 			  quantize.domain([d3.min(data, function(d){ return +d[MAP_VALUE] }),
 				d3.max(data, function(d){ return +d[MAP_VALUE] })]);
-			  var color;
+			  //var color;
 			  d3.json("https://s3-us-west-2.amazonaws.com/vida-public/geo/us.json", function(error, us) {
 				svg.append("g")
 					.attr("class", "states-choropleth")
@@ -492,14 +502,17 @@ function draw_map()
 						}
 						if(i!=-1)
 						{	state_list.push(id_name_map[d.id]);
-							$(this).attr("fill", "Blue");
+							$(this).attr("fill",function (d) {
+								return color1(state_list);
+								
+							})
 						}
 						//document.getElementById("lb").innerHTML=state_list;
-						console.log(state_list);
+						//console.log(state_list);
 						//document.getElementById("chart").innerHTML="";						
 						
 						//draw_graph();
-						//document.getElementById("clear").disabled=false;		
+						document.getElementById("clear").disabled=false;		
 						reDraw();								
 					})
 					//function for tooltip text
@@ -538,25 +551,49 @@ function draw_map()
 					.on("mouseout", function(d) {
 				svg.selectAll(".line")
 					.attr("stroke-opacity",1);
-			});
+					})
+
+					.attr("fill", function (d) {
+						//return  color1(d.properties.name);
+						//console.log(d);
+					});
 			  
 				svg.append("path")
 					.datum(topojson.mesh(us, us.objects.states, function(a, b) { return a !== b; }))
 					.attr("class", "states")
 					.attr("transform", "scale(" + SCALE + ")")
 					.attr("d", path_map);// variable path
+					
 			  
 			  });
 			  
 			  });
 			});
+}
 
+function dropfunc() {
+var drop=document.getElementById('dropper').value;
+drop=Number(drop);
+focus.selectAll(".line")
+.attr("stroke-opacity", function (unRates) {
+var bigDrop=false;
+for(var i=1; i<unRates.length; i++) {
+  if(unRates[i-1].Unemplyment-unRates[i].Unemplyment>drop)
+  bigDrop=true;
+}
+if(bigDrop) {
+return 1;
+}
+else {
+return 0.1;
+}
+});
 }
 
 function pumpfunc() {
 var rise=document.getElementById('riseper').value;
 rise=Number(rise);
-svg.selectAll(".line")
+focus.selectAll(".line")
 .attr("stroke-opacity", function (unRates) {
 var bigIncrease=false;
 for(var i=1; i<unRates.length; i++) {
@@ -571,23 +608,29 @@ return 0.1;
 }
 });
 }
-
-function dropfunc() {
-var drop=document.getElementById('dropper').value;
-drop=Number(drop);
-svg.selectAll(".line")
-.attr("stroke-opacity", function (unRates) {
-var bigDrop=false;
-for(var i=1; i<unRates.length; i++) {
-  if(unRates[i-1].Unemplyment-unRates[i].Unemplyment>drop)
-  bigDrop=true;
-}
-if(bigDrop) {
-return 1;
+function checktoggle(element) {
+if(element.checked) {
+ state_list.push("National");
+ reDraw();
 }
 else {
-return 0.1;
+	state_list.pop();
+	reDraw();
+	//document.getElementById(chart).innerHTML ="";
 }
-});
+}
+
+function clear()
+{
+	while(States_list.length > 0) {
+		States_list.pop();
+	}
+	document.getElementById("lb").innerHTML ="";
+	document.getElementById("canvas-svg").innerHTML ="";
+	draw_map();
+	document.getElementById("clear").disabled ="True";
+}
+function refresh(){
+location.reload();
 }
 </script>
